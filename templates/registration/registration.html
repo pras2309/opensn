@@ -1,0 +1,43 @@
+{% extends "common/base.html" %}
+
+{% block title %}User Registration{% endblock %}
+
+{% block content %}
+<form action="/registration/index/" method="post">
+ {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="fieldWrapper">
+        {{ form.username.errors }}
+        <label for="id_username">Username:</label>
+        {{ form.username }}
+    </div>
+    <div class="fieldWrapper">
+        {{ form.first_name.errors }}
+        <label for="id_first_name">First Name:</label>
+        {{ form.first_name }}
+    </div>
+    <div class="fieldWrapper">
+        {{ form.last_name.errors }}
+        <label for="id_last_name">Last Name:</label>
+        {{ form.last_name }}
+    </div>
+    <div class="fieldWrapper">
+        {{ form.email.errors }}
+        <label for="id_email">Email Address: </label>
+        {{ form.email }}
+    </div>
+    <div class="fieldWrapper">
+        {{ form.dob_dd.errors }}
+        {{ form.dob_mm.errors }}
+        {{ form.dob_yy.errors }}
+        <label for="id_date_of_birth">Date Of Birth: </label>
+        DD {{ form.dob_dd }} MM {{ form.dob_mm }} YYYY {{ form.dob_yy }}
+    </div>
+    <div class="fieldWrapper">
+        {{ form.sex.errors }}
+        <label for="id_sex">Sex: </label>
+        {{ form.sex }}
+    </div>        
+    <p><input type="submit" value="Send message" /></p> 
+</form>
+{% endblock %}

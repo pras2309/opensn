@@ -1,0 +1,31 @@
+{% load staticfiles %}
+
+<!DOCTYPE html >
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{% block title %}PolTrac{% endblock %}</title>
+<link rel="stylesheet" href="{% static  "/static/css/bootstrap.css" %}" type="text/css" />
+<link rel="stylesheet" href="{% static  "/static/css/custom.css" %}" type="text/css" />
+<link rel="stylesheet" href="{% static  "/static/css/bootstrap-responsive.css" %}" />
+</head>
+
+<body>
+<div class="container" >
+{% include "common/header.html" %}
+
+    <content class="row-fluid">
+
+        <section class="well span12 transparentBG">
+            {% block content %}
+    
+    {% endblock %}
+        </section>
+    </content>
+    
+    {% include "common/footer.html" %}
+    
+</div>
+<script src="{% static  "/static/js/bootstrap.min.js" %}"></script>
+</body>
+</html>

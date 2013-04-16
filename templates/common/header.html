@@ -1,0 +1,37 @@
+        {% block topnav %}
+<header class="row-fluid">
+    <div class="well header">
+        <h1>opesn</h1>
+        {% if user_info.id %}
+            Welcome {{user_info.first_name}} {{user_info.last_name}} !
+        {% endif %}
+        
+        <div class="navbar pull-right">
+            {% if not user_info.id %}
+            <div class="navbar-inner">
+			    <ul class="nav">
+			      <li><a href="/home">Opensn</a></li>
+			      <li><a href="/accounts/register">Sign In/Sign Up</a></li>
+			    </ul>
+            </div>
+            {% else %}
+            <div class="navbar-inner">
+                <ul class="nav">
+                  <li><a href="/home">Opensn</a></li>
+                  <li><a href="/profile">Profile</a></li>
+                  <li><a href="/wall">Wall</a></li>                  
+                  <li><a href="#">Settings</a></li>
+                <li><a href="/logout">Logout</a></li>
+                </ul>
+               <form class="navbar-search">
+                   <input type="text" class="search-query" placeholder="Search">
+               </form>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+</header>
+        
+        {% endblock %}
+
