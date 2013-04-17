@@ -3,8 +3,10 @@
 
 {% block title %} User Profile{% endblock %}
 {% block content %}
+<section class="well span6">
 <img src="/static/{{user_data.profile_image}}" style="height:200px;"/>
-<table class="table" style="width:600px;">
+
+<table class="table" style="">
 
 <tr>
     <th  align="left">Name</th>
@@ -22,7 +24,11 @@
     <th  align="left">Sex</th>
     <td>{{user_data.sex}}</td>
 </tr>
-
-
 </table>
+</section>
+
+<section class="well span6">
+User Wall Section...
+</section>
+
 {% endblock %}
