@@ -1,11 +1,12 @@
         {% block topnav %}
 <header class="row-fluid">
     <div class="well header">
-        <h1>opesn</h1>
+        <!--  <h1>opesn</h1> -->
+         {% comment %}
         {% if user_info.id %}
             Welcome {{user_info.first_name}} {{user_info.last_name}} !
         {% endif %}
-        
+         {% endcomment %}
         <div class="navbar pull-right">
             {% if not user_info.id %}
             <div class="navbar-inner">
