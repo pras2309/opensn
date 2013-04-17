@@ -5,6 +5,7 @@ from django.contrib import admin
 admin.autodiscover()
 from django.contrib.auth import views as auth_views
 from customuser import views as UserHome
+from general import views as General
 
 urlpatterns = patterns('',
     # Examples:
@@ -23,6 +24,12 @@ urlpatterns = patterns('',
     url(r'^home/$', UserHome.home, name="home"),
     url(r'^me/$', UserHome.profile, name="me"),
     url(r'^wall/$', UserHome.wall, name="wall"),
+    
+    url(r'^about/$', General.aboutus, name="aboutus"),
+    url(r'^terms/$', General.terms, name="terms"),
+    url(r'^privacy/$', General.privacy, name="privacy"),
+    url(r'^blog/$', General.blog, name="blog"),
+
     
 )
 
