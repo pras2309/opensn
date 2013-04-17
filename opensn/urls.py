@@ -21,7 +21,7 @@ urlpatterns = patterns('',
     url(r'^logout/$', auth_views.logout, {'template_name': 'registration/logout.html'}, name='auth_logout'),    
     url(r'^$',  UserHome.home, name="site_root"),
     url(r'^home/$', UserHome.home, name="home"),
-    url(r'^profile/$', UserHome.profile, name="profile"),
+    url(r'^me/$', UserHome.profile, name="me"),
     url(r'^wall/$', UserHome.wall, name="wall"),
     
 )
