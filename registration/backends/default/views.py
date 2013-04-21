@@ -83,7 +83,7 @@ class RegistrationView(BaseRegistrationView):
             site = Site.objects.get_current()
         else:
             site = RequestSite(request)
-        new_user = RegistrationProfile.objects.create_inactive_user(username, email, password, f_name, l_name)
+        new_user = RegistrationProfile.objects.create_inactive_user(username, email, password, site, f_name, l_name)
         
         user_id=int(new_user.id)
         from customuser.models import CustomUser
