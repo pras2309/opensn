@@ -119,6 +119,18 @@ class RegistrationFormNoFreeEmail(RegistrationForm):
             raise forms.ValidationError(_("Registration using free email addresses is prohibited. Please supply a different email address."))
         return self.cleaned_data['email']
     
+    
+##############################################################################
+
+from django.forms import widgets
+from django.utils.dates import MONTHS
+import datetime
+
+year_list = range(datetime.date.today().year, 1905)        
+years = [(year, year) for year in year_list]
+months = MONTHS.items()
+days = [(i, i) for i in range(1, 32)]
+    
 class RegistrationFormNoUserName(RegistrationFormUniqueEmail):
     """
     A registration form that only requires the user to enter their e-mail 
@@ -133,9 +145,9 @@ class RegistrationFormNoUserName(RegistrationFormUniqueEmail):
     dob_dd = forms.CharField(max_length=200, required=False)
     dob_mm = forms.CharField(max_length=200, required=False)
     dob_yy = forms.CharField(max_length=4, required=False)    
-    sex = forms.ChoiceField(widget = forms.Select(), 
-                 choices = ([('M','M'), ('F','F'), ]), required = True,)
-    profile_image = forms.ImageField()    
+    sex = forms.ChoiceField(widget = forms.RadioSelect(), 
+                 choices = ([('M','Male'), ('F','Female'), ]), required = False, )
+    profile_image = forms.ImageField(required=False)    
 
     def clean_username(self):
         "This function is required to overwrite an inherited username clean"
