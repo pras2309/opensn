@@ -28,7 +28,37 @@
 </section>
 
 <section class="well span6">
-User Wall Section...
+    <form method="post" action="{% url "me" %}">
+    {% csrf_token %}
+        <table>
+            
+            <textarea cols="170" id="id_wall_content" name="wall_content" rows="5" style="width:390px;"></textarea>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <input type="submit" value="Submit">
+                </td>
+            </tr>
+        </table>
+    </form>
+       {% for result in wall_data %}
+       <div>
+       <div class="span3"><img src="/static/{{result.profile_image}}" width=""></div>
+       <div><strong>{{result.f_name}} {{result.l_name}}</strong>
+       <br />
+       {{result.wall_content}}
+       </div>
+       </div>
+       <br />
+       <p>
+           {% comment %}
+           {{result.content_type}}
+           {% endcomment %}
+           {{result1 }}
+       </p>
+   {% empty %}
+       <p>No results found.</p>
+   {% endfor %}
 </section>
 
 {% endblock %}

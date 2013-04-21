@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from customuser.models import *
+from customuser.forms import WallForm
 
 @login_required
 def home(request):
@@ -13,12 +14,32 @@ def home(request):
 @login_required
 def profile(request):
     user_data =  userProfile(request.user.id)
+    wall_obj = Wall()
+    wall_data = wall_obj.wallContent(user_id=request.user.id)
+    
+    form = WallForm()
+    if request.method == 'POST': # If the form has been submitted...
+        form = WallForm(request.POST) # A form bound to the POST data
+        if form.is_valid(): # All validation rules pass
+            # Process the data in form.cleaned_data
+            # ...
+            post_data = request.POST
+            rec = Wall(user_id=request.user.id,
+                               wall_content=post_data["wall_content"])
+            rec.save()
+            return HttpResponseRedirect('/me') # Redirect after POST
+    
     return render(request, 'registration/profile.html', {
         'user_data': user_data[0],
-        'user_info':request.user        
+        'user_info':request.user,
+        'wall_data': wall_data,
+        'form' : form
     })
     
 @login_required
 def wall(request):
-    return render(request, 'wall/index.html', {'user_info':request.user}) 
+    
+    wall_data = Wall.objects.filter(user_id=request.user.id)
+    return render(request, 'wall/index.html', {'user_info':request.user,
+                                               'wall_data': wall_data}) 
     

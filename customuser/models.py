@@ -15,6 +15,23 @@ class CustomUser(models.Model):
     sex = models.CharField(max_length=200) 
     profile_image = models.ImageField(upload_to = 'profile_images/', default = 'pic_folder/None/no-img.jpg')
 
+class Wall(models.Model):
+    "User wall"
+    user_id = models.IntegerField()
+    wall_content = models.TextField()
+
+    def wallContent(self, user_id):
+        cursor = connection.cursor()
+        sql = """
+        SELECT * FROM customuser_wall a
+        LEFT JOIN customuser_customuser b  ON a.user_id = b.user_id
+        WHERE a.user_id = %s ORDER BY a.id DESC;
+        """
+        cursor.execute(sql, [user_id])
+        return dictfetchall(cursor)
+
+
+
 
 def userProfile(user_id):
         cursor = connection.cursor()
