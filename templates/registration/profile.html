@@ -27,7 +27,7 @@
 </table>
 </section>
 
-<section class="well span6">
+<section class="well span6" style="">
     <form method="post" action="{% url "me" %}">
     {% csrf_token %}
         <table>
@@ -42,20 +42,14 @@
         </table>
     </form>
        {% for result in wall_data %}
-       <div>
-       <div class="span3"><img src="/static/{{result.profile_image}}" width=""></div>
-       <div><strong>{{result.f_name}} {{result.l_name}}</strong>
-       <br />
-       {{result.wall_content}}
+       <div style="border-bottom:1px solid #e3e3e3;">
+	       <div class="span6"><strong>{{result.f_name}} {{result.l_name}}</strong>
+	       <br />
+	       {{result.wall_content}}
+	       </div>
        </div>
-       </div>
        <br />
-       <p>
-           {% comment %}
-           {{result.content_type}}
-           {% endcomment %}
-           {{result1 }}
-       </p>
+       <div style="clear:both;"></div>
    {% empty %}
        <p>No results found.</p>
    {% endfor %}
