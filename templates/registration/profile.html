@@ -43,7 +43,7 @@
     </form>
        {% for result in wall_data %}
        <div style="border-bottom:1px solid #e3e3e3;">
-	       <div class="span6"><strong>{{result.f_name}} {{result.l_name}}</strong>
+	       <div class="span6"><strong><a href="{% url "user_profile" result.user_id %}">{{result.f_name}} {{result.l_name}}</a></strong>
 	       <br />
 	       {{result.wall_content}}
 	       </div>
