@@ -1,0 +1,26 @@
+{% extends "registration/registration_base.html" %}
+{% block title %}Search{% endblock %}
+{{search_results}}
+{% block content %}
+    <h2>Search</h2>
+    <section>
+    <form method="get" action=".">
+               <form class="" action="/search" method="get">
+                  <div class="span4"> 
+                    <input type="text" class="" placeholder="Search" name="q" value="{{q}}">
+                    <div><input type="submit" value="Search"></div>
+                  </div>
+               </form>
+    <div style="clear:both"></div>
+    <h3>Results</h3>
+        {% if result_count > 0 %}
+            {% for result in search_results %}
+                <p>
+                    <a href="{% url "user_profile"  result.user_id %}">{{result.first_name}} {{result.last_name}} </a>
+                </p>
+            {% endfor %}
+        {% else %}
+                <p>No results found.</p>
+        {% endif %}
+    </section>
+{% endblock %}
