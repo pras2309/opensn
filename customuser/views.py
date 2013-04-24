@@ -13,6 +13,7 @@ def home(request):
 
 @login_required
 def profile(request):
+
     user_data =  userProfile(request.user.id)
     wall_obj = Wall()
     wall_data = wall_obj.wallContent(user_id=request.user.id)
@@ -35,11 +36,14 @@ def profile(request):
         'wall_data': wall_data,
         'form' : form
     })
-    
+
 @login_required
-def wall(request):
+def user_profile(request, user_id):
     
-    wall_data = Wall.objects.filter(user_id=request.user.id)
-    return render(request, 'wall/index.html', {'user_info':request.user,
-                                               'wall_data': wall_data}) 
+    user_id = int(user_id)
+    user_data =  userProfile(user_id)
     
+    return render(request, 'registration/profile_user.html', {
+        'user_data': user_data[0],
+        'user_info':request.user,
+    })    

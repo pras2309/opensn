@@ -15,6 +15,10 @@ class CustomUser(models.Model):
     sex = models.CharField(max_length=200) 
     profile_image = models.ImageField(upload_to = 'profile_images/', default = 'pic_folder/None/no-img.jpg')
 
+
+    def __unicode__(self):
+        return self.f_name
+
 class Wall(models.Model):
     "User wall"
     user_id = models.IntegerField()
@@ -30,13 +34,21 @@ class Wall(models.Model):
         cursor.execute(sql, [user_id])
         return dictfetchall(cursor)
 
-
-
-
 def userProfile(user_id):
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM auth_user a LEFT JOIN customuser_customuser b ON a.id=b.user_id WHERE a.id = %s ", [user_id])
         return dictfetchall(cursor)
+
+def searchQuery(q):
+        q = '%' + q + '%'
+        cursor = connection.cursor()
+        sql = """SELECT * FROM auth_user a LEFT JOIN customuser_customuser b \
+        ON a.id=b.user_id WHERE 1 AND b.f_name LIKE '%%%s%%' OR b.l_name LIKE '%%%s%%' """ %(q, q)
+        cursor.execute(sql)
+        result = dictfetchall(cursor)
+        return result
+
+
 
 def dictfetchall(cursor):
     "Returns all rows from a cursor as a dict"
