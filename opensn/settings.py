@@ -2,6 +2,7 @@
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+SITE_ROOT = "/Users/prashantagarwal/Projects/opensn"
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -50,7 +51,7 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-MEDIA_ROOT = '/Users/prashantagarwal/Projects/opensn/static/'
+MEDIA_ROOT = SITE_ROOT+'/static/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -72,7 +73,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    "/Users/prashantagarwal/Projects/opensn/static",
+    SITE_ROOT+"/static",
 )
 
 # List of finder classes that know how to find static files in
@@ -119,7 +120,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    "/Users/prashantagarwal/Projects/opensn/templates"
+    SITE_ROOT+"/templates"
 )
 
 INSTALLED_APPS = (
@@ -136,7 +137,29 @@ INSTALLED_APPS = (
     "registration",
     "email_usernames",
     "customuser",
+    "customsearch",
+    "general",
+  #  'haystack',
 )
+
+#HAYSTACK_SITECONF = 'opensn.search_sites'
+#HAYSTACK_SEARCH_ENGINE = 'whoosh'
+HAYSTACK_SOLR_URL = 'http://localhost:8983/solr'
+
+HAYSTACK_WHOOSH_PATH = SITE_ROOT+'/whoosh/mysite_index'
+
+
+
+HAYSTACK_CONNECTIONS = {
+                        'default':{
+                            'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+                            'PATH': SITE_ROOT+'/whoosh/mysite_index',
+                                   }
+                        }
+# ...or for multicore...
+#HAYSTACK_SOLR_URL = 'http://127.0.0.1:8983/solr/opensn'
+
+
 CUSTOM_USER_MODEL = 'customuser.CustomUser'
 ACCOUNT_ACTIVATION_DAYS = 2
 EMAIL_HOST = 'localhost'
@@ -147,6 +170,14 @@ LOGIN_REDIRECT_URL = '/home/'
 # the site admins on every HTTP 500 error when DEBUG=False.
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = 'prashant.india@gmail.com'
+EMAIL_HOST_PASSWORD = ''
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -170,3 +201,5 @@ LOGGING = {
         },
     }
 }
+
+
