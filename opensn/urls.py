@@ -26,12 +26,22 @@ urlpatterns = patterns('',
     url(r'^home/$', UserHome.home, name="home"),
     url(r'^me/$', UserHome.profile, name="me"),
     url(r'^profile/(?P<user_id>\d)/$', UserHome.user_profile, name="user_profile"),
+    url(r'^wall/$', UserHome.wall, name="wall"),
+    url(r'^searchUrls/$', UserHome.searchUrls, name="searchUrls"),
+    url(r'^textCrawler/$', UserHome.textCrawler, name="textCrawler"),
+    url(r'^settings/$', UserHome.settings, name="settings"),
+    url(r'^password/change/$', auth_views.password_change, {'template_name': 'registration/password_change_form.html'},
+         name='auth_password_change'),
+    url(r'^password/change/done/$', auth_views.password_change_done, 
+        {'template_name': 'registration/password_change_done.html'},  name='auth_password_change_done'),
+    
     
     url(r'^about/$', General.aboutus, name="aboutus"),
     url(r'^terms/$', General.terms, name="terms"),
     url(r'^privacy/$', General.privacy, name="privacy"),
     url(r'^blog/$', General.blog, name="blog"),
     url(r'^search/$', CustomSearch.home, name="search"),
+    
 )
 
 

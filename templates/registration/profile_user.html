@@ -12,18 +12,27 @@
     <th  align="left">Name</th>
     <td>{{user_data.f_name}} {{user_data.l_name}}</td>
 </tr>
+{% if user_data.enable_email = 1 %}
 <tr>
     <th  align="left">Email</th>
     <td>{{user_data.email}}</td>
 </tr>
+{% endif %}
+
+{% if user_data.enable_dob = 1 %}
 <tr>
     <th  align="left">Date Of Birth</th>
     <td>{{user_data.date_of_birth}}</td>
 </tr>
+{% endif %}
+
+{% if user_data.enable_sex = 1 %}
+
 <tr>
     <th  align="left">Sex</th>
     <td>{{user_data.sex}}</td>
 </tr>
+{% endif %}
 </table>
 </section>
 

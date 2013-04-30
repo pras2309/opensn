@@ -1,19 +1,22 @@
 from django.db import models
-from django.db import connection
-
-# Create your models here.
-from django.contrib.auth.models import User, UserManager
+from django.db import connection,transaction
 
 class CustomUser(models.Model):
     """User with app settings."""
     user_id = models.IntegerField()
     timezone = models.CharField(max_length=100, null=True)
     profile_image = models.ImageField(upload_to='userprofile')
+    enable_email = models.BooleanField(default=0)
     f_name = models.CharField(max_length=100, null=True)
     l_name = models.CharField(max_length=100, null=True)
     date_of_birth = models.CharField(max_length=200)
+    enable_dob = models.BooleanField(default=0)
     sex = models.CharField(max_length=200) 
+    enable_sex = models.BooleanField(default=0)
+    
+    
     profile_image = models.ImageField(upload_to = 'profile_images/', default = 'pic_folder/None/no-img.jpg')
+
 
 
     def __unicode__(self):
@@ -48,7 +51,20 @@ def searchQuery(q):
         result = dictfetchall(cursor)
         return result
 
+def updateSettings(user_id, enable_email, enable_dob, enable_sex):
+    sql = """UPDATE customuser_customuser 
+        SET enable_email = '%s', 
+        enable_dob = '%s', 
+        enable_sex = '%s' 
+        WHERE user_id='%s' """ 
+    
+    cursor = connection.cursor()
+    cursor.execute(sql,  
+            [enable_email, enable_dob, enable_sex, user_id])
+    transaction.commit_unless_managed()
 
+    row = cursor.fetchone()
+    return row
 
 def dictfetchall(cursor):
     "Returns all rows from a cursor as a dict"
