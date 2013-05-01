@@ -278,7 +278,7 @@
 						endOfCrawling = true;
 						if(firstPosting == false){
 							firstPosting = true;
-/*							$('#postPreview').click(function(){
+							$('#postPreview').click(function(){
 								var allowPosting = false;
 								imageId = "";
 								pTP = "";
@@ -353,15 +353,9 @@
 									}, "json");
 									text = "";
 								}	
-							});*/
+							});
 						}
 					}, "json");
-				} else {
-					//alert("Test");
-					$('#postPreview').click(function(){
-						
-						alert("In post preview");
-					});
 				}
 			}
 		});

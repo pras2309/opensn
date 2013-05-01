@@ -6,6 +6,8 @@ from django.contrib.auth.decorators import login_required
 from customuser.models import *
 from customuser.forms import WallForm, SettingsForm
 import subprocess
+from opensn import settings
+from opensn.settings import SITE_ROOT
 
 @login_required
 def home(request):
@@ -89,7 +91,7 @@ def settings(request):
 def searchUrls(request):
     text = str(request.GET["text"])
     description = str(request.GET["description"])
-    url = "php /Users/prashantagarwal/Projects/phptest/searchUrls.php '"+text+"' '"+description+"'"
+    url = "php "+SITE_ROOT+ "/utils/searchUrls.php '"+text+"' '"+description+"'"
     proc = subprocess.Popen(url, shell=True, stdout=subprocess.PIPE)
     json = proc.stdout.read()
     return HttpResponse(json, mimetype="application/json") 
@@ -97,6 +99,7 @@ def searchUrls(request):
 @login_required
 def textCrawler(request):
     text = str(request.GET["text"])
-    proc = subprocess.Popen("php /Users/prashantagarwal/Projects/phptest/textCrawler.php "+text, shell=True, stdout=subprocess.PIPE)
+    url = "php "+SITE_ROOT+ "/utils//textCrawler.php "+text
+    proc = subprocess.Popen(url, shell=True, stdout=subprocess.PIPE)
     json = proc.stdout.read()
     return HttpResponse(json, mimetype="application/json") 

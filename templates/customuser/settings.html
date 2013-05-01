@@ -1,0 +1,41 @@
+{% extends "common/base.html" %}
+
+{% block title %} Home{% endblock %}
+
+{% block content %}
+
+<section class="span3">
+    <h4>Settings</h4>
+		{% if message %} <div class="text-info">{{message}}</div> {% endif %}
+		
+		<form action="{% url "settings" %}" method="post">{% csrf_token %}
+            <table class="table">
+                <tr>
+                    <th><label for="id_enable_email">Enable email</label></th>
+                    <td><input id="id_enable_email" name="enable_email" type="checkbox" {% if user_data.enable_email = 1 %}checked {% endif %}></td>
+                </tr>
+                <tr>
+                    <th><label for="id_enable_dob">Enable Date of Birth</label></th>
+                    <td><input id="id_enable_dob" name="enable_dob" type="checkbox" {% if user_data.enable_dob = 1 %}checked {% endif %}></td>
+                </tr>
+                <tr>
+                    <th><label for="id_enable_sex">Enable sex:</label></th>
+                    <td><input id="id_enable_sex" name="enable_sex" type="checkbox" {% if user_data.enable_sex = 1 %}checked {% endif %}></td>
+                </tr>
+                <tr>
+                    <td colspan="2""><input type="submit" value="Update"></td>
+                </tr>
+                
+                
+            </table>
+		</form>
+</section>
+<section class="span3 offset3">
+<table>
+    <tr>
+        <td><a href="/password/change">Change Password</a></td>
+        
+    </tr>
+</table>
+</section>
+{% endblock %}
