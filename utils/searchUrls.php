@@ -12,7 +12,7 @@
 	//$description = $_GET["description"];
 	$text = $argv[1];
 	$description = $argv[2];
-	
+
 	$text = " ".str_replace("\n", " ", $text);
 	$description = " ".str_replace("\n", " ", $description);
 	
@@ -26,6 +26,8 @@
 			if($currentUrl[0] == " ") $currentUrl = "http://".substr($currentUrl, 1);
 			$text = str_replace($matches[0][$i], "<a href='".$currentUrl."' target='_blank'>".$matches[0][$i]."</a>",$text);
 		}
+	} else {
+		$text = $argv[1];
 	}
 	
 	
@@ -37,6 +39,8 @@
 			if($currentUrl[0] == " ") $currentUrl = "http://".substr($currentUrl, 1);
 			$description = str_replace($matches[0][$i], "<a href='".$currentUrl."' target='_blank' >".$matches[0][$i]."</a>", $description);
 		}
+	} else {
+		$description = $argv[2];
 	}
 	
 	$answer = array(

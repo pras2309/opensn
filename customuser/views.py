@@ -4,10 +4,11 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from customuser.models import *
-from customuser.forms import WallForm, SettingsForm
+from customuser.forms import WallForm, SettingsForm,  ProfileEditForm
 import subprocess
 from opensn import settings
 from opensn.settings import SITE_ROOT
+import json
 
 @login_required
 def home(request):
@@ -19,7 +20,6 @@ def profile(request):
     user_data =  userProfile(request.user.id)
     wall_obj = Wall()
     wall_data = wall_obj.wallContent(user_id=request.user.id)
-    
     form = WallForm()
     if request.method == 'POST': # If the form has been submitted...
         form = WallForm(request.POST) # A form bound to the POST data
@@ -49,7 +49,37 @@ def user_profile(request, user_id):
         'user_data': user_data[0],
         'user_info':request.user,
     })
+
+@login_required
+def profile_edit(request):
     
+    user_id = request.user.id
+    user_data =  userProfile(user_id)
+    user_data = user_data[0]
+    dob = user_data["date_of_birth"].split('/');
+    user_data['dob_dd'] = int(dob[0])
+    user_data['dob_mm'] = int(dob[1])
+    user_data['dob_yy'] = int(dob[2])
+    
+    form = ProfileEditForm(user_data)
+    message = ''
+    if request.method == 'POST': # If the form has been submitted...
+        form = ProfileEditForm(request.POST) # A form bound to the POST data
+        if form.is_valid(): # All validation rules pass
+            # Process the data in form.cleaned_data
+            
+            
+            post_data = form.cleaned_data
+            import ipdb;ipdb.set_trace()
+            message = "Profile updated successfully"    
+    
+    return render(request, 'registration/user_edit_form.html', {
+        'user_data': user_data,
+        'user_info':request.user,
+        'form': form,
+        'message': message
+    })
+
 @login_required
 def wall(request):
     wall_obj = Wall()
@@ -94,12 +124,16 @@ def searchUrls(request):
     url = "php "+SITE_ROOT+ "/utils/searchUrls.php '"+text+"' '"+description+"'"
     proc = subprocess.Popen(url, shell=True, stdout=subprocess.PIPE)
     json = proc.stdout.read()
+
     return HttpResponse(json, mimetype="application/json") 
 
 @login_required
 def textCrawler(request):
     text = str(request.GET["text"])
-    url = "php "+SITE_ROOT+ "/utils//textCrawler.php "+text
+    url = "php "+SITE_ROOT+ "/utils/textCrawler.php "+text
     proc = subprocess.Popen(url, shell=True, stdout=subprocess.PIPE)
     json = proc.stdout.read()
+    rec = Wall(user_id=request.user.id,
+                   wall_content=json)
+    rec.save()
     return HttpResponse(json, mimetype="application/json") 

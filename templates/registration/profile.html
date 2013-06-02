@@ -1,8 +1,11 @@
-
 {% extends "common/base.html" %}
 
 {% block title %} User Profile{% endblock %}
+
 {% block content %}
+{% load to_json %}
+
+
 <section class="well span6">
 <img src="/static/{{user_data.profile_image}}" class="span4" style="height:200px;"/>
 
@@ -28,31 +31,70 @@
 </section>
 
 <section class="well span6" style="">
-    <form method="post" action="{% url "me" %}">
-    {% csrf_token %}
-        <table>
-            
-            <textarea cols="170" id="id_wall_content" name="wall_content" rows="5" style="width:390px;"></textarea>
-            <tr>
-                <td>&nbsp;</td>
-                <td>
-                    <input type="submit" value="Submit">
-                </td>
-            </tr>
-        </table>
-    </form>
+    <div>
+            <div class="linkPreview">
+                <div id="previewLoading"></div>
+                <div style="float: left;">
+                    <textarea id="text"> What's on your mind?</textarea>
+                    <div style="clear: both"></div>
+                </div>
+                <div id="preview">
+                    <div id="previewImages">
+                        <div id="previewImage"><img src='/static/img/loader.gif' style='margin-left: 43%; margin-top: 39%;' ></img></div>
+                        <input type="hidden" id="photoNumber" value="0" />
+                    </div>
+                    <div id="previewContent">
+                        <div id="closePreview" title="Remove" ></div>
+                        <div id="previewTitle"></div>
+                        <div id="previewUrl"></div>
+                        <div id="previewDescription"></div>
+                        <div id="hiddenDescription"></div>
+                        <div id="previewButtons" >
+                            <div id='previewPreviousImg' class="buttonLeftDeactive" ></div><div id='previewNextImg' class="buttonRightDeactive"  ></div>  <div class="photoNumbers" ></div> <div class="chooseThumbnail">Choose a thumbnail</div>
+                        </div>
+                        <input type="checkbox" id="noThumb" class="noThumbCb" />
+                        <div class="nT"  ><span id="noThumbDiv" >No thumbnail</span></div>
+                    </div>
+                    <div style="clear: both"></div>
+                </div>
+                <div style="clear: both"></div>
+                <div id="postPreview">
+                    <input class="postPreviewButton" type="submit" value="Post" />
+                    <div style="clear: both"></div>
+                </div>
+       <div style="border-bottom:1px solid #e3e3e3;" class="previewPostedList">
        {% for result in wall_data %}
-       <div style="border-bottom:1px solid #e3e3e3;">
-	       <div class="span6"><strong><a href="{% url "user_profile" result.user_id %}">{{result.f_name}} {{result.l_name}}</a></strong>
+                          {% autoescape off %}
+                          <div class="previewPosted">
+                            {{ result.wall_content|json_lp }}
+                            <div class="previewTextPosted">
+                            {{urls.urls}}</div>
+                            {{videoIframe}}
+                            <div class="previewImagesPosted">
+                              <div class="previewImagePosted">{{leftSideContent}}</div>
+                            </div>
+                            <div class="previewContentPosted">
+                              <div class="previewTitlePosted" id="pTP" style="width:200px" ><a href="{{hrefUrl}}" target="_blank">{{title}}</a></div>
+                              <div class="previewUrlPosted">{{fancyUrl}}</div>
+                              <div class="previewDescriptionPosted" id="pDP" style="width: '+contentWidth+'px" >{{urls.description}}</div>
+                            </div>
+                            <div style="clear: both"></div>
+                          </div>
+                          {% endautoescape %}    	       
+           <div class="span6"><strong><a href="{% url "user_profile" result.user_id %}">{{result.f_name}} {{result.l_name}}</a></strong>
 	       <br />
-	       {{result.wall_content}}
 	       </div>
-       </div>
        <br />
        <div style="clear:both;"></div>
    {% empty %}
        <p>No results found.</p>
    {% endfor %}
+   </div>
+   
+   </div>
+   </div>
+
+
 </section>
 
 {% endblock %}

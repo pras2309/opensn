@@ -26,6 +26,8 @@ urlpatterns = patterns('',
     url(r'^home/$', UserHome.home, name="home"),
     url(r'^me/$', UserHome.profile, name="me"),
     url(r'^profile/(?P<user_id>\d)/$', UserHome.user_profile, name="user_profile"),
+    url(r'^profile/edit/$', UserHome.profile_edit, name="profile_edit"),
+
     url(r'^wall/$', UserHome.wall, name="wall"),
     url(r'^searchUrls/$', UserHome.searchUrls, name="searchUrls"),
     url(r'^textCrawler/$', UserHome.textCrawler, name="textCrawler"),
