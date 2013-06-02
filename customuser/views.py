@@ -6,11 +6,9 @@ from django.contrib.auth.decorators import login_required
 from customuser.models import *
 from customuser.forms import WallForm, SettingsForm,  ProfileEditForm
 import subprocess
-from opensn import settings
 from opensn.settings import SITE_ROOT
-import json
+import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
-from django.utils.html import escape
 
 @login_required
 def home(request):
@@ -69,10 +67,8 @@ def profile_edit(request):
         form = ProfileEditForm(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
             # Process the data in form.cleaned_data
-            
-            
+
             post_data = form.cleaned_data
-            import ipdb;ipdb.set_trace()
             message = "Profile updated successfully"    
     
     return render(request, 'registration/user_edit_form.html', {
