@@ -37,6 +37,7 @@
 		var imageId = "";					
 		var pTP = "";					
 		var pDP = "";
+		var videoFlag = false;
 		
 		var textText = "What's on your mind?";
 		$('#text').focus(function(){
@@ -51,6 +52,15 @@
 				$(this).css({'color': 'grey'});
 			}
 		});
+		
+		$('#postPreview').click(function(){
+			if(!urlRegex.test(text)){
+				//alert("In else to post other content");	
+				text = " "+$('#text').val();
+				//alert(text);
+			}
+		});		
+				
 		
 		function resetPreview(){
 			$('#previewPreviousImg').removeClass('buttonLeftActive');
@@ -290,29 +300,47 @@
 									text = "";
 									allowPosting = true;
 								}
+								
+								if($('#noThumb').attr("checked") == "checked" || images.length == 0){
+									contentWidth = 495;
+									leftSideContent = "";
+								}else{
+									if(video == "yes"){
+										var pattern = /id="(.+?)"/i;
+										imageId = videoIframe.match(pattern);
+										imageId = imageId[1];
+										pTP = "pTP"+imageId;
+										pDP = "pDP"+imageId;
+										imageId = "img"+imageId;
+										image = "<img id='"+imageId+"' src='"+$('#imagePreview'+photoNumber).attr("src")+"' class='imgIframe' style='width: 130px; height: auto; float: left;' ></img>";
+										videoPlay = '<span class="videoPostPlay"></span>';
+										leftSideContent = image+videoPlay;
+										videoFlag = true;
+									}
+									else{
+										image = "<img src='"+$('#imagePreview'+photoNumber).attr("src")+"' style='width: 130px; height: auto; float: left;' ></img>";
+										leftSideContent = '<a href="'+hrefUrl+'" target="_blank">'+image+'</a>';
+									}
+									imgSrc = $('#imagePreview'+photoNumber).attr("src");
+								}
+								
+								//videoFlag, videoIframe, imageId, pTP, pDP, imgSrc,contentWidth, hrefUrl, title, fancyUrl 
+								
 								if((trim(text) != "" && endOfCrawling == true) || allowPosting == true){
-									$.get('/searchUrls', {text: text, description: description}, function(urls) {
-										if($('#noThumb').attr("checked") == "checked" || images.length == 0){
-											contentWidth = 495;
-											leftSideContent = "";
-										}
-										else{
-											if(video == "yes"){
-												var pattern = /id="(.+?)"/i;
-												imageId = videoIframe.match(pattern);
-												imageId = imageId[1];
-												pTP = "pTP"+imageId;
-												pDP = "pDP"+imageId;
-												imageId = "img"+imageId;
-												image = "<img id='"+imageId+"' src='"+$('#imagePreview'+photoNumber).attr("src")+"' class='imgIframe' style='width: 130px; height: auto; float: left;' ></img>";
-												videoPlay = '<span class="videoPostPlay"></span>';
-												leftSideContent = image+videoPlay;
-											}
-											else{
-												image = "<img src='"+$('#imagePreview'+photoNumber).attr("src")+"' style='width: 130px; height: auto; float: left;' ></img>";
-												leftSideContent = '<a href="'+hrefUrl+'" target="_blank">'+image+'</a>';
-											}
-										}
+									$.post('/searchUrls/', {text: text, 
+															description: description,
+															videoFlag: videoFlag,
+															videoIframe:videoIframe,
+															imageId: imageId,
+															pTP:pTP,
+															pDP:pDP,
+															imgSrc:imgSrc,
+															contentWidth:contentWidth,
+															hrefUrl:hrefUrl,
+															title:title,
+															fancyUrl:fancyUrl
+															}, function(urls) {
+										
 										content = '<div class="previewPosted">'+
 														'<div class="previewTextPosted">'+urls.urls+'</div>'+
 														videoIframe+
@@ -359,5 +387,5 @@
 				} 
 			}
 		});
-	}; 
+	} 
 })(jQuery);

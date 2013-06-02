@@ -1,7 +1,6 @@
 from django import template
 register = template.Library()
 import simplejson
-from django.utils.safestring import mark_safe
 
 
 @register.filter

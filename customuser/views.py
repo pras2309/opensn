@@ -9,6 +9,8 @@ import subprocess
 from opensn import settings
 from opensn.settings import SITE_ROOT
 import json
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.html import escape
 
 @login_required
 def home(request):
@@ -118,22 +120,39 @@ def settings(request):
 
 
 @login_required
+@csrf_exempt
 def searchUrls(request):
-    text = str(request.GET["text"])
-    description = str(request.GET["description"])
+    post_data = request.POST
+    text = str(post_data["text"])
+    description = str(post_data["description"])
     url = "php "+SITE_ROOT+ "/utils/searchUrls.php '"+text+"' '"+description+"'"
     proc = subprocess.Popen(url, shell=True, stdout=subprocess.PIPE)
-    json = proc.stdout.read()
+    json_resp = proc.stdout.read()
+    parse_json = json.loads(json_resp)
 
-    return HttpResponse(json, mimetype="application/json") 
+    parse_json['videoFlag'] = post_data['videoFlag']
+    parse_json['videoIframe'] = post_data['videoIframe']
+    parse_json['imageId'] = post_data['imageId']
+    parse_json['pTP'] = post_data['pTP']
+    parse_json['pDP'] = post_data['pDP']
+    parse_json['imgSrc'] = post_data['imgSrc']
+    parse_json['contentWidth'] = post_data['contentWidth']
+    parse_json['hrefUrl'] = post_data['hrefUrl']
+    parse_json['title'] = post_data['title']
+    parse_json['fancyUrl'] = post_data['fancyUrl']
+    
+    parse_json = json.dumps(parse_json)
+    #import ipdb;ipdb.set_trace()
+
+    rec = Wall(user_id=request.user.id, wall_content=parse_json)
+    rec.save()
+    return HttpResponse(json_resp, mimetype="application/json") 
 
 @login_required
 def textCrawler(request):
     text = str(request.GET["text"])
     url = "php "+SITE_ROOT+ "/utils/textCrawler.php "+text
     proc = subprocess.Popen(url, shell=True, stdout=subprocess.PIPE)
-    json = proc.stdout.read()
-    rec = Wall(user_id=request.user.id,
-                   wall_content=json)
-    rec.save()
-    return HttpResponse(json, mimetype="application/json") 
+    json_resp = proc.stdout.read()
+
+    return HttpResponse(json_resp, mimetype="application/json") 

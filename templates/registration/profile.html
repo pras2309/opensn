@@ -65,29 +65,37 @@
        <div style="border-bottom:1px solid #e3e3e3;" class="previewPostedList">
        {% for result in wall_data %}
                           {% autoescape off %}
+                         <div class="span6"><strong>
+                              <a href="{% url "user_profile" result.user_id %}">{{result.f_name}} {{result.l_name}}</a> 
+                                says:</strong></div>
                           <div class="previewPosted">
-                            {{ result.wall_content|json_lp }}
-                            <div class="previewTextPosted">
-                            {{urls.urls}}</div>
-                            {{videoIframe}}
+                            <div class="previewTextPosted">{{ result.wall_content|json_lp:'urls' }}</div>
+                             {% if result.wall_content|json_lp:'videoFlag' %}
+                                {% autoescape off %}
+                                  {{ result.wall_content|json_lp:'videoIframe' }}
+                                {% endautoescape %}
+                             {% endif %}
                             <div class="previewImagesPosted">
-                              <div class="previewImagePosted">{{leftSideContent}}</div>
+                              <div class="previewImagePosted">
+                                <img src='{{ result.wall_content|json_lp:'imgSrc' }}' style='width: 130px; height: auto; float: left;' ></img>
+                                {% if result.wall_content|json_lp:'videoFlag' %}
+                                    <span class="videoPostPlay"></span>
+                                {% endif %}
+                              </div>
                             </div>
                             <div class="previewContentPosted">
-                              <div class="previewTitlePosted" id="pTP" style="width:200px" ><a href="{{hrefUrl}}" target="_blank">{{title}}</a></div>
-                              <div class="previewUrlPosted">{{fancyUrl}}</div>
-                              <div class="previewDescriptionPosted" id="pDP" style="width: '+contentWidth+'px" >{{urls.description}}</div>
+                              <div class="previewTitlePosted" id="{{result.wall_content|json_lp:'pTP'}}" style="width:{{result.wall_content|json_lp:'contentWidth'}}px" >
+                                <a href="{{result.wall_content|json_lp:'hrefUrl'}}" target="_blank">{{result.wall_content|json_lp:'title'}}</a></div>
+                              <div class="previewUrlPosted">{{result.wall_content|json_lp:'fancyUrl'}}</div>
+                              <div class="previewDescriptionPosted" id="{{result.wall_content|json_lp:'pDP'}}" style="width: '{{result.wall_content|json_lp:'contentWidth'}}px">{{result.wall_content|json_lp:'description'}}</div>
                             </div>
                             <div style="clear: both"></div>
                           </div>
                           {% endautoescape %}    	       
-           <div class="span6"><strong><a href="{% url "user_profile" result.user_id %}">{{result.f_name}} {{result.l_name}}</a></strong>
-	       <br />
-	       </div>
        <br />
        <div style="clear:both;"></div>
    {% empty %}
-       <p>No results found.</p>
+       <!-- <p>No results found.</p> -->
    {% endfor %}
    </div>
    
