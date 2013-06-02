@@ -7,7 +7,7 @@ from customuser.models import *
 from customuser.forms import WallForm, SettingsForm,  ProfileEditForm
 import subprocess
 from opensn.settings import SITE_ROOT
-import simplejson as json
+import simplejson
 from django.views.decorators.csrf import csrf_exempt
 
 @login_required
@@ -124,7 +124,7 @@ def searchUrls(request):
     url = "php "+SITE_ROOT+ "/utils/searchUrls.php '"+text+"' '"+description+"'"
     proc = subprocess.Popen(url, shell=True, stdout=subprocess.PIPE)
     json_resp = proc.stdout.read()
-    parse_json = json.loads(json_resp)
+    parse_json = simplejson.loads(json_resp)
 
     parse_json['videoFlag'] = post_data['videoFlag']
     parse_json['videoIframe'] = post_data['videoIframe']
@@ -137,7 +137,7 @@ def searchUrls(request):
     parse_json['title'] = post_data['title']
     parse_json['fancyUrl'] = post_data['fancyUrl']
     
-    parse_json = json.dumps(parse_json)
+    parse_json = simplejson.dumps(parse_json)
     #import ipdb;ipdb.set_trace()
 
     rec = Wall(user_id=request.user.id, wall_content=parse_json)
