@@ -78,7 +78,7 @@
                             <div class="previewImagesPosted">
                               <div class="previewImagePosted">
                                 <img src='{{ result.wall_content|json_lp:'imgSrc' }}' style='width: 130px; height: auto; float: left;' ></img>
-                                {% if result.wall_content|json_lp:'videoFlag' %}
+                                {% if result.wall_content|json_lp:'videoFlag' == 'true' %}
                                     <span class="videoPostPlay"></span>
                                 {% endif %}
                               </div>
