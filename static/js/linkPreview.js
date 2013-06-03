@@ -323,6 +323,9 @@
 										leftSideContent = '<a href="'+hrefUrl+'" target="_blank">'+image+'</a>';
 									}
 									imgSrc = $('#imagePreview'+photoNumber).attr("src");
+									if(!imgSrc) {
+										imgSrc = '';
+									}
 								}
 								
 								//videoFlag, videoIframe, imageId, pTP, pDP, imgSrc,contentWidth, hrefUrl, title, fancyUrl 
