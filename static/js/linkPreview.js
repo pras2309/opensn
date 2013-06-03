@@ -38,6 +38,7 @@
 		var pTP = "";					
 		var pDP = "";
 		var videoFlag = false;
+		var imgSrc = '';
 		
 		var textText = "What's on your mind?";
 		$('#text').focus(function(){
