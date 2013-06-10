@@ -17,7 +17,6 @@ def home(request):
 
 @login_required
 def profile(request, message = None):
-    import ipdb;ipdb.set_trace()
     user_data =  userProfile(request.user.id)
     wall_obj = Wall()
     wall_data = wall_obj.wallContent(user_id=request.user.id)
