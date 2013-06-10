@@ -9,14 +9,15 @@ import subprocess
 from opensn.settings import SITE_ROOT
 import simplejson
 from django.views.decorators.csrf import csrf_exempt
+from django.core.urlresolvers import reverse
 
 @login_required
 def home(request):
     return render(request, 'registration/home.html', {'user_info':request.user}) 
 
 @login_required
-def profile(request):
-
+def profile(request, message = None):
+    import ipdb;ipdb.set_trace()
     user_data =  userProfile(request.user.id)
     wall_obj = Wall()
     wall_data = wall_obj.wallContent(user_id=request.user.id)
@@ -36,7 +37,8 @@ def profile(request):
         'user_data': user_data[0],
         'user_info':request.user,
         'wall_data': wall_data,
-        'form' : form
+        'form' : form,
+        'message': message
     })
 
 @login_required
@@ -63,20 +65,37 @@ def profile_edit(request):
     
     form = ProfileEditForm(user_data)
     message = ''
+    
     if request.method == 'POST': # If the form has been submitted...
-        form = ProfileEditForm(request.POST) # A form bound to the POST data
+        form = ProfileEditForm(request.POST, request.FILES) # A form bound to the POST data
+        #import ipdb;ipdb.set_trace()
+
         if form.is_valid(): # All validation rules pass
             # Process the data in form.cleaned_data
-
             post_data = form.cleaned_data
-            message = "Profile updated successfully"    
-    
+            post_data['date_of_birth'] = post_data['dob_mm']+"/"+post_data['dob_dd']+"/"+post_data['dob_yy']
+            custom_user = CustomUser.objects.get(user_id=user_id)
+            custom_user.f_name=post_data['f_name']
+            custom_user.l_name=post_data['l_name']
+            custom_user.date_of_birth=post_data['date_of_birth']
+            custom_user.sex=post_data['sex'] 
+            if post_data['profile_image']:
+                custom_user.profile_image = post_data['profile_image']
+            custom_user.save()
+            message = "Profile updated successfully"
+            HttpResponseRedirect('/me')
+                
     return render(request, 'registration/user_edit_form.html', {
         'user_data': user_data,
         'user_info':request.user,
         'form': form,
         'message': message
     })
+
+@login_required
+def profile_edit_success(request):
+    return render(request, 'registration/user_edit_succeess.html')
+    
 
 @login_required
 def wall(request):
@@ -100,8 +119,7 @@ def settings(request):
         form = SettingsForm(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
             # Process the data in form.cleaned_data
-            
-            
+
             post_data = form.cleaned_data
             updateSettings (user_id, int(post_data["enable_email"]), 
                                          int(post_data["enable_dob"]), int(post_data["enable_sex"]))
@@ -125,7 +143,7 @@ def searchUrls(request):
     proc = subprocess.Popen(url, shell=True, stdout=subprocess.PIPE)
     json_resp = proc.stdout.read()
     parse_json = simplejson.loads(json_resp)
-
+    import ipdb;ipdb.set_trace()
     parse_json['videoFlag'] = post_data['videoFlag']
     parse_json['videoIframe'] = post_data['videoIframe']
     parse_json['imageId'] = post_data['imageId']

@@ -1,0 +1,78 @@
+{% extends "registration/registration_base.html" %}
+{% block title %}Register for an account{% endblock %}
+{% block content %}
+<section class="span6 pull-right">
+<form method='post' action='' enctype="multipart/form-data">{% csrf_token %}
+<div>
+<div>
+{{ form.non_field_errors }}
+{%if form.errors %}
+    {% if form.f_name.errors %}First Name:  is a required field{% endif %}<br />
+    {% if form.l_name.errors %}Last Name is a required field{% endif %}<br />
+    {% if form.email.errors %}{{form.email.errors}}{% endif %}<br />
+    {% if form.password1.errors or form.password2.errors %}Password is required{% endif %}<br />
+{% endif %}
+{% if message %} <div class="text-info">{{message}}</div> {% endif %}
+
+</div>
+
+    <div>
+    
+        <div class="span6">
+            <label for "id_f_name">First Name</label>
+            <input id="id_f_name" maxlength="200" name="f_name" type="text" style="width:180px;" value = "{{form.data.f_name}}">
+        </div>
+        <div>
+            <label for "id_f_name">Last Name</label>
+            <input id="id_l_name" maxlength="200" name="l_name" type="text" style="width:180px;" value = "{{form.data.l_name}}">
+        </div>
+    </div>
+    <div>
+        <label for "">Birthday</label>
+        <select name="dob_mm" id="id_dob_dd" aria-label="Month" class=""  style="width:100px;">
+          <option value="-1">Month:</option>
+          {% for k, v in form.fields.dob_mm.choices %}
+            <option value="{{k}}" {% if form.data.dob_mm == k %} selected {% endif %}>{{v}}</option>
+          {% endfor %}
+        </select>
+        
+        <select name="dob_dd" id="id_dob_dd" aria-label="Day" class="" style="width:100px;">
+          <option value="-1">Day:</option>
+          {% for day_k, day_v in form.fields.dob_dd.choices %}
+            <option value="{{day_k}}" {% if form.data.dob_dd == day_k %} selected {% endif %}>{{day_v}}</option>
+          {% endfor %}
+        </select>
+        
+        <select name="dob_yy" id="birthday_year" aria-label="Year" class="" style="width:100px;">
+          <option value="-1">Year:</option>
+          {% for year_k, year_v in form.fields.dob_yy.choices %}
+            <option value="{{year_k}}" {% if form.data.dob_yy == year_k %} selected {% endif %}>{{year_v}}</option>
+          {% endfor %}
+        </select>
+    </div>    
+    <div>
+        <div class="span3"><label for="id_sex_1">
+           <input id="id_sex_1" name="sex" type="radio" value="F" {% if form.data.sex == 'F' %}CHECKED{% endif %}> Female</label>
+        </div>
+        <div><label for="id_sex_0">
+           <input id="id_sex_0" name="sex" type="radio" value="M" {% if form.data.sex == 'M' %}CHECKED{% endif %}> Male</label>
+        </div>
+    </div>
+    <div style="">
+        <label for "id_profile_image" style="width:100px;">Profile Image</label>
+        <div><img src="/static/{{form.data.profile_image}}" class="span4" style="height:200px;"/></div>
+        <div style="clear:both;"></div>
+        <div class=""><input id="id_profile_image" name="profile_image" type="file"></div>
+        
+        
+    </div>
+    <div><input type="submit" value="   Update Profile    " /></div>
+</div>
+{{form.username}}
+{{form.timezone}}
+
+</form>
+
+</section>
+       
+{% endblock %}

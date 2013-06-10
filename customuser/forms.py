@@ -4,11 +4,15 @@ import calendar
 
 years = []
 for i in range (1915, date.today().year+1):
-    years.append((i,i))
+    years.append((i, i))
     
 months = []
 for i in range(1,13):
     months.append((i, calendar.month_name[i]))
+
+days = []
+for i in range(1,32):
+    days.append((i, i))
 
 class WallForm(forms.Form):
     wall_content = forms.CharField(widget=forms.Textarea)
@@ -22,7 +26,9 @@ class SettingsForm(forms.Form):
 class ProfileEditForm(forms.Form):
     f_name = forms.CharField(max_length=200)
     l_name = forms.CharField(max_length=200)    
-    dob_dd = forms.CharField(max_length=200, required=False)
+    dob_dd = forms.ChoiceField(widget=forms.Select(),  
+                             choices = (days),
+                              required=False)
     dob_mm = forms.ChoiceField(widget=forms.Select(),  
                              choices = (months),
                               required=False)

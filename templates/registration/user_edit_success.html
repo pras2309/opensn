@@ -1,0 +1,16 @@
+{% extends "registration/registration_base.html" %}
+{% block title %}Register for an account{% endblock %}
+{% block content %}
+<section class="span6 pull-right">
+<form method='post' action='' enctype="multipart/form-data">{% csrf_token %}
+<div>
+<div>
+ <div class="text-info">Profile updated successfully</div>
+
+</div>
+
+
+
+</section>
+       
+{% endblock %}
