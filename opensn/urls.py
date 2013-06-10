@@ -25,6 +25,8 @@ urlpatterns = patterns('',
     url(r'^$',  UserHome.home, name="site_root"),
     url(r'^home/$', UserHome.home, name="home"),
     url(r'^me/$', UserHome.profile, name="me"),
+    url(r'^friends/$', UserHome.friends, name="friends"),
+
     url(r'^profile/(?P<user_id>\d)/$', UserHome.user_profile, name="user_profile"),
     url(r'^profile/edit/$', UserHome.profile_edit, name="profile_edit"),
 

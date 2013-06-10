@@ -106,6 +106,12 @@ def wall(request):
         'wall_data': wall_data,
     })
 
+@login_required
+def friends(request):
+    return render(request, 'customuser/friends.html', {
+    })
+
+
 
 @login_required
 def settings(request):

@@ -1,0 +1,14 @@
+{% extends "common/base.html" %}
+
+{% block title %} Home{% endblock %}
+
+{% block content %}
+
+<section class="span3">
+    <h4>Friends</h4>
+		{% if message %} <div class="text-info">{{message}}</div> {% endif %}
+		
+</section>
+<section class="span3 offset3">
+</section>
+{% endblock %}
