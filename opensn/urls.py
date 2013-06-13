@@ -7,7 +7,7 @@ from django.contrib.auth import views as auth_views
 from customuser import views as UserHome
 from general import views as General
 from customsearch import views as CustomSearch
-
+from messages import views as Messages
 
 urlpatterns = patterns('',
     # Examples:
@@ -46,6 +46,8 @@ urlpatterns = patterns('',
     url(r'^blog/$', General.blog, name="blog"),
     url(r'^search/$', CustomSearch.home, name="search"),
     
+    url(r'^messages/$', Messages.home, name="messages_home"),
+
 )
 
 
