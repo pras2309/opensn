@@ -10,6 +10,7 @@ from opensn.settings import SITE_ROOT
 import simplejson
 from django.views.decorators.csrf import csrf_exempt
 from django.core.urlresolvers import reverse
+import datetime
 
 @login_required
 def home(request):
@@ -148,7 +149,7 @@ def searchUrls(request):
     proc = subprocess.Popen(url, shell=True, stdout=subprocess.PIPE)
     json_resp = proc.stdout.read()
     parse_json = simplejson.loads(json_resp)
-    import ipdb;ipdb.set_trace()
+    
     parse_json['videoFlag'] = post_data['videoFlag']
     parse_json['videoIframe'] = post_data['videoIframe']
     parse_json['imageId'] = post_data['imageId']
@@ -159,11 +160,13 @@ def searchUrls(request):
     parse_json['hrefUrl'] = post_data['hrefUrl']
     parse_json['title'] = post_data['title']
     parse_json['fancyUrl'] = post_data['fancyUrl']
+    now = datetime.datetime.now()
+    date_time = now.strftime('%Y-%m-%d %H:%M:%S')
     
     parse_json = simplejson.dumps(parse_json)
     #import ipdb;ipdb.set_trace()
 
-    rec = Wall(user_id=request.user.id, wall_content=parse_json)
+    rec = Wall(user_id=request.user.id, wall_content=parse_json, date_time = date_time)
     rec.save()
     return HttpResponse(json_resp, mimetype="application/json") 
 

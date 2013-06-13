@@ -69,6 +69,7 @@
                          <div class="span6"><strong>
                               <a href="{% url "user_profile" result.user_id %}">{{result.f_name}} {{result.l_name}}</a> 
                                 says:</strong></div>
+                                <div>{{result.date_time}}</div>
                           <div class="previewPosted">
                             <div class="previewTextPosted">{{ result.wall_content|json_lp:'urls' }}</div>
                              {% if result.wall_content|json_lp:'videoFlag' %}
