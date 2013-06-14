@@ -70,6 +70,16 @@
                               <a href="{% url "user_profile" result.user_id %}">{{result.f_name}} {{result.l_name}}</a> 
                                 says:</strong></div>
                                 <div>{{result.date_time}}</div>
+                         <!-- voting markup -->
+                          <div class="voting_wrapper post-heading-right" id="<?php echo $this->id;?>">
+                              <div class="voting_btn">
+                                  <div class="up_button">&nbsp;</div><span class="up_votes">0</span>
+                              </div>
+                              <div class="voting_btn">
+                                  <div class="down_button">&nbsp;</div><span class="down_votes">0</span>
+                              </div> 
+                          </div>
+                          <!-- voting markup end -->
                           <div class="previewPosted">
                             <div class="previewTextPosted">{{ result.wall_content|json_lp:'urls' }}</div>
                              {% if result.wall_content|json_lp:'videoFlag' %}
@@ -106,5 +116,92 @@
 
 
 </section>
+
+<script type="text/javascript">
+function confirmDelete() {
+  var answer = confirm("Do you really want to delete this blog? ");
+  if (answer) {
+    return true;
+    }
+  return false;
+}
+
+$(document).ready(function() {
+  
+  //####### on page load, retrive votes for each content
+  $.each( $('.voting_wrapper'), function(){
+    
+    //retrive unique id from this voting_wrapper element
+    var unique_id = $(this).attr("id");
+    
+    //prepare post content
+    post_data = {'unique_id':unique_id, 'vote':'fetch'};
+
+    //send our data to "vote_process.php" using jQuery $.post()
+    $.post('/vote', post_data,  function(response) {
+        //retrive votes from server, replace each vote count text
+        $('#'+unique_id+' .up_votes').text(response.vote_up); 
+        $('#'+unique_id+' .down_votes').text(response.vote_down);
+      },'json');
+  });
+
+  //####### on button click, get user vote and send it to vote_process.php using jQuery $.post().
+  $(".voting_wrapper .voting_btn").click(function (e) {
+    
+    //get class name (down_button / up_button) of clicked element
+    var clicked_button = $(this).children().attr('class');
+    
+    //get unique ID from voted parent element
+    var unique_id   = $(this).parent().attr("id"); 
+    
+    if(clicked_button==='down_button') //user disliked the content
+    {
+      //prepare post content
+      post_data = {'unique_id':unique_id, 'vote':'down'};
+      
+      //send our data to "vote_process.php" using jQuery $.post()
+      $.post('/vote', post_data, function(data) {
+        
+        //replace vote down count text with new values
+        data = $.parseJSON(data);
+        $('#'+unique_id+' .down_votes').text(data.vote_down);
+        
+        //thank user for the dislike
+        alert("Thanks! Each Vote Counts, Even Dislikes!");
+        
+      }).fail(function(err) { 
+      
+      //alert user about the HTTP server error
+      alert(err.statusText); 
+      });
+    }
+    else if(clicked_button==='up_button') //user liked the content
+    {
+      //prepare post content
+      post_data = {'unique_id':unique_id, 'vote':'up'};
+      
+      //send our data to "vote_process.php" using jQuery $.post()
+      $.post('/vote', post_data, function(data) {
+      
+        //replace vote up count text with new values
+        data = $.parseJSON(data);
+
+        $('#'+unique_id+' .up_votes').text(data.vote_up);
+        
+        //thank user for liking the content
+        alert("Thanks! For Liking This Content.");
+      }).fail(function(err) { 
+      
+      //alert user about the HTTP server error
+      alert(err.statusText); 
+      });
+    }
+  });
+  //end 
+});
+
+
+</script>
+
 
 {% endblock %}

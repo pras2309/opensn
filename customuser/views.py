@@ -41,6 +41,18 @@ def profile(request, message = None):
         'message': message
     })
 
+
+@login_required
+@csrf_exempt
+def vote(request):
+    #FIXME: Vote controller pending
+    wall = Wall.objects.get(id=id)
+    wall['vote_up'] = 1
+    wall['vote_down'] = 1
+    wall.save()
+    json_resp = {'status':'success'}
+    return HttpResponse(json_resp, mimetype="application/json") 
+
 @login_required
 def user_profile(request, user_id):
     
@@ -112,8 +124,6 @@ def friends(request):
     return render(request, 'customuser/friends.html', {
     })
 
-
-
 @login_required
 def settings(request):
 
@@ -162,9 +172,8 @@ def searchUrls(request):
     parse_json['fancyUrl'] = post_data['fancyUrl']
     now = datetime.datetime.now()
     date_time = now.strftime('%Y-%m-%d %H:%M:%S')
-    
+
     parse_json = simplejson.dumps(parse_json)
-    #import ipdb;ipdb.set_trace()
 
     rec = Wall(user_id=request.user.id, wall_content=parse_json, date_time = date_time)
     rec.save()

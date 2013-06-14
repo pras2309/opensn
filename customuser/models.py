@@ -27,6 +27,8 @@ class Wall(models.Model):
     user_id = models.IntegerField()
     wall_content = models.TextField()
     date_time = models.DateTimeField()
+    vote_up = models.IntegerField()
+    vote_down = models.IntegerField()
 
     def wallContent(self, user_id):
         cursor = connection.cursor()
