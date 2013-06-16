@@ -7,7 +7,11 @@ from django.contrib.auth import views as auth_views
 from customuser import views as UserHome
 from general import views as General
 from customsearch import views as CustomSearch
-from messages import views as Messages
+from django.views.generic import RedirectView
+
+from django_messages.views import *
+
+#from messages_custom import views as CustomMessages
 
 urlpatterns = patterns('',
     # Examples:
@@ -46,11 +50,20 @@ urlpatterns = patterns('',
     url(r'^privacy/$', General.privacy, name="privacy"),
     url(r'^blog/$', General.blog, name="blog"),
     url(r'^search/$', CustomSearch.home, name="search"),
-    
-    url(r'^messages/$', Messages.home, name="messages_home"),
+    #url(r'^messages/$', CustomMessages.home, name="messages_home"),
+    #url(r'^messages/$',  include('django_messages.urls')),
 
+    url(r'^messages/$', RedirectView.as_view(url='inbox/'), name='messages_redirect'),
+    url(r'^messages/inbox/$', inbox, name='messages_inbox'),
+    url(r'^messages/outbox/$', outbox, name='messages_outbox'),
+    url(r'^messages/compose/$', compose, name='messages_compose'),
+    url(r'^messages/compose/(?P<recipient>[\w.@+-]+)/$', compose, name='messages_compose_to'),
+    url(r'^messages/reply/(?P<message_id>[\d]+)/$', reply, name='messages_reply'),
+    url(r'^messages/view/(?P<message_id>[\d]+)/$', view, name='messages_detail'),
+    url(r'^messages/delete/(?P<message_id>[\d]+)/$', delete, name='messages_delete'),
+    url(r'^messages/undelete/(?P<message_id>[\d]+)/$', undelete, name='messages_undelete'),
+    url(r'^messages/trash/$', trash, name='messages_trash'),
 )
-
 
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns

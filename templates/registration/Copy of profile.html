@@ -1,0 +1,81 @@
+{% extends "common/base.html" %}
+
+{% block title %} User Profile{% endblock %}
+
+{% block content %}
+{% load to_json %}
+
+
+<section class="well span6">
+<img src="/static/{{user_data.profile_image}}" class="span4" style="height:200px;"/>
+
+<table class="table">
+
+<tr>
+    <th  align="left">Name</th>
+    <td>{{user_data.f_name}} {{user_data.l_name}}</td>
+</tr>
+<tr>
+    <th  align="left">Email</th>
+    <td>{{user_data.email}}</td>
+</tr>
+<tr>
+    <th  align="left">Date Of Birth</th>
+    <td>{{user_data.date_of_birth}}</td>
+</tr>
+<tr>
+    <th  align="left">Sex</th>
+    <td>{{user_data.sex}}</td>
+</tr>
+</table>
+</section>
+
+<section class="well span6" style="">
+    <form method="post" action="{% url "me" %}">
+    {% csrf_token %}
+        <table>
+            
+            <textarea cols="170" id="id_wall_content" name="wall_content" rows="5" style="width:390px;"></textarea>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <input type="submit" value="Submit">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+       {% for result in wall_data %}
+       <div style="border-bottom:1px solid #e3e3e3;" class="previewPostedList">
+                          {% autoescape off %}
+                          <div class="previewPosted">
+                            {{ result.wall_content|json_lp }}
+                            <div class="previewTextPosted">
+                            {{urls.urls}}</div>
+                            {{videoIframe}}
+                            <div class="previewImagesPosted">
+                              <div class="previewImagePosted">{{leftSideContent}}</div>
+                            </div>
+                            <div class="previewContentPosted">
+                              <div class="previewTitlePosted" id="pTP" style="width:200px" ><a href="{{hrefUrl}}" target="_blank">{{title}}</a></div>
+                              <div class="previewUrlPosted">{{fancyUrl}}</div>
+                              <div class="previewDescriptionPosted" id="pDP" style="width: '+contentWidth+'px" >{{urls.description}}</div>
+                            </div>
+                            <div style="clear: both"></div>
+                          </div>
+                          {% endautoescape %}    	       
+             
+             
+             
+           <div class="span6"><strong><a href="{% url "user_profile" result.user_id %}">{{result.f_name}} {{result.l_name}}</a></strong>
+	       <br />
+	       </div>
+       </div>
+       <br />
+       <div style="clear:both;"></div>
+   {% empty %}
+       <p>No results found.</p>
+   {% endfor %}
+</section>
+
+{% endblock %}

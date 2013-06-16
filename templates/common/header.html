@@ -19,11 +19,13 @@
             <div class="">
                 <ul class="nav">
                   <li><a href="/messages"><img src="/static/img/mail.png" style="height:30px;"></a></li>
+                  <li>{{ messages_inbox_count }}</li>
                   <li><a href="/home">Opensn</a></li>
                   <li><a href="/me">Me</a></li>
                   <li><a href="/friends">Friends</a></li>
                   <li><a href="/settings">Settings</a></li>
                 <li><a href="/logout">Logout</a></li>
+                
                 </ul>
                <form class="navbar-search" action="/search" method="get">
                    <input type="text" class="search-query" placeholder="Search" name="q">

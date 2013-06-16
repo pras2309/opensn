@@ -18,4 +18,4 @@ def home(request, q=None):
                  'q':search_string,
                  'search_results':search_results,
                  'result_count': len(search_results)
-                })  
+                })
