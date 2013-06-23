@@ -46,11 +46,19 @@ def profile(request, message = None):
 @csrf_exempt
 def vote(request):
     #FIXME: Vote controller pending
-    wall = Wall.objects.get(id=id)
-    wall['vote_up'] = 1
-    wall['vote_down'] = 1
+    post_data = request.POST
+    wall = Wall.objects.get(pk=post_data["unique_id"])
+    json_resp = {}
+    if post_data["vote"]=='up':
+        wall.vote_up = 1
+        wall.vote_down = 0
+        json_resp['vote_up'] ='1'
+    elif post_data["vote"]=='down':
+        wall.vote_up = 0
+        wall.vote_down = 1
+        json_resp['vote_down'] = 1
     wall.save()
-    json_resp = {'status':'success'}
+    json_resp = simplejson.dumps(json_resp)
     return HttpResponse(json_resp, mimetype="application/json") 
 
 @login_required

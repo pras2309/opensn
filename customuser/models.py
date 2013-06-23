@@ -13,11 +13,7 @@ class CustomUser(models.Model):
     enable_dob = models.BooleanField(default=0)
     sex = models.CharField(max_length=200) 
     enable_sex = models.BooleanField(default=0)
-    
-    
     profile_image = models.ImageField(upload_to = 'profile_images/', default = 'pic_folder/None/no-img.jpg')
-
-
 
     def __unicode__(self):
         return self.f_name
@@ -30,6 +26,9 @@ class Wall(models.Model):
     vote_up = models.IntegerField()
     vote_down = models.IntegerField()
 
+    def __unicode__(self):
+        return self.pk
+    
     def wallContent(self, user_id):
         cursor = connection.cursor()
         sql = """

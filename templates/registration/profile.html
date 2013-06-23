@@ -65,13 +65,15 @@
                 </div>
        <div style="border-bottom:1px solid #e3e3e3;" class="previewPostedList">
        {% for result in wall_data %}
+                          {{result.pk}}
                           {% autoescape off %}
                          <div class="span6"><strong>
                               <a href="{% url "user_profile" result.user_id %}">{{result.f_name}} {{result.l_name}}</a> 
                                 says:</strong></div>
                                 <div>{{result.date_time}}</div>
+                                
                          <!-- voting markup -->
-                          <div class="voting_wrapper post-heading-right" id="<?php echo $this->id;?>">
+                          <div class="voting_wrapper post-heading-right" id="{{result.id}}">
                               <div class="voting_btn">
                                   <div class="up_button">&nbsp;</div><span class="up_votes">0</span>
                               </div>
@@ -118,13 +120,6 @@
 </section>
 
 <script type="text/javascript">
-function confirmDelete() {
-  var answer = confirm("Do you really want to delete this blog? ");
-  if (answer) {
-    return true;
-    }
-  return false;
-}
 
 $(document).ready(function() {
   
@@ -193,7 +188,7 @@ $(document).ready(function() {
       }).fail(function(err) { 
       
       //alert user about the HTTP server error
-      alert(err.statusText); 
+     // alert(err.statusText); 
       });
     }
   });
